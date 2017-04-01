@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1,minimum-scale=1.0,maximum-scale=1.0, user-scalable=no">
+    <title>星空注册</title>
+    <link type="text/css" href="css/bootstrap.min.css" rel="stylesheet">
+    <script type="text/javascript" src="js/jquery-1.11.2.min.js"></script>
+    <script type="text/javascript" src="js/bootstrap.min.js"></script>
+
+    <script type="text/javascript">
+	$(function(){
+		$("button[type='button']").click(function(){
+			if($.trim($("#email").val()) == ''){
+				alert("一个邮箱都不给我!");
+				return false;
+			}
+			if($.trim($("#username").val()) == ''){
+				alert("好歹搞个昵称吧，亲!");
+				return false;
+			}
+			if($.trim($("#password").val()) == ''){
+				alert("没密码？逗我呢!");
+				return false;
+			}
+			$("#reg_form").submit();
+		});
+	})
+
+
+
+    </script>
+</head>
+<body>
+
+<div class="row">
+    <div class="col-sm-4 col-sm-offset-4 ">
+        <a href="homepage" class="thumbnail">
+            <img src="" alt="星空">
+        </a>
+    </div>
+</div>
+
+<section class="content-wrap">
+    <div class="container">
+        <div class="row">
+            <aside class="col-sm-3 sidebar">
+                <div class="widget"></div>
+            </aside>
+            <main class="col-sm-7 main-content">
+
+                <form action="regist" class="form-horizontal" id="reg_form" method="post">
+                    <div class="form-group has-success">
+                        <label class="col-sm-2 control-label">邮箱</label>
+                        <div class="col-sm-6 input-group">
+						<span class="input-group-addon">
+							<img alt="" src="" width="15">
+						</span>
+                            <input id="email" name="email" type="text" class="form-control" placeholder="您的邮箱">
+                        </div>
+                        <div class="col-sm-offset-2 input-group"><font color="RED"></font></div>
+                    </div>
+                    <div class="form-group has-success">
+                        <label class="col-sm-2 control-label">用户名</label>
+                        <div class="col-sm-6 input-group">
+						<span class="input-group-addon">
+							<img alt="" src="" width="15">
+						</span>
+                            <input id="username" name="username" type="text" class="form-control" placeholder="您的昵称">
+                        </div>
+                        <div class="col-sm-offset-2 input-group"><font color="RED"></font>
+                        </div>
+                    </div>
+                    <div class="form-group has-success">
+                        <label class="col-sm-2 control-label">密码</label>
+                        <div class="col-sm-6 input-group">
+						<span class="input-group-addon">
+							<img alt="" src="imgs/eye.png" width="15">
+						</span>
+                            <input id="password" name="password" type="password" class="form-control"
+                                   placeholder="您的密码">
+                        </div>
+                        <div class="col-sm-offset-2 input-group"><font color="RED"></font>
+                        </div>
+                    </div>
+                    <button type="button"
+                            class="col-sm-6 col-sm-offset-2 btn btn-primary">创建新账号
+                    </button>
+                </form>
+            </main>
+            <aside class="col-sm-2 sidebar">
+                <div class="widget"></div>
+            </aside>
+        </div>
+    </div>
+</section>
+
+
+</body>
+</html>
