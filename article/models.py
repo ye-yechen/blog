@@ -33,6 +33,7 @@ class Article(models.Model):
     update_time = models.DateTimeField()  # 每次修改model时更新时间
     deleted = models.BooleanField(default=False)  # 文章是否被删除
     allow_comment = models.BooleanField(default=False)  # 文章是否允许评论
+    category = models.CharField(max_length=30,blank=True)
 
     def __unicode__(self):
         return self.title

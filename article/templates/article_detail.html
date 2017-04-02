@@ -1,0 +1,42 @@
+{% extends 'blog_base.html' %}
+{% block title%}
+{{article.title}}
+{% endblock %}
+
+{% block extra_head %}
+
+{% endblock %}
+
+{% block content %}
+<section class="content-wrap">
+    <div class="container">
+        <div class="row">
+            <aside class="col-md-1 sidebar"></aside>
+            <main class="col-md-7 main-content">
+                 <article id="{{article.id}}" class="post">
+                    <header class="entry-header">
+                        <h2 class="entry-title" itemprop="name headline">
+                            {{ article.title }}
+                        </h2>
+
+                        <div class="entry-meta">
+                            <time class="entry-date">{{article.create_time}}</time>
+                            <span class="dot">&bull;</span> <span class="categories-links" itemprop="keywords"><a
+                                href="" title="" rel="category tag">分类</a></span>
+                            <span class="dot">&bull;</span> <a href="" class="comments-link" title="">9 条评论</a>
+                        </div>
+                    </header>
+                     <div class="entry-content" itemprop="articleBody">
+                          {% autoescape off %}
+                          {{ article.content_html }}
+                          {% endautoescape %}
+                     </div>
+                     <footer class="entry-footer">
+                        <span class="tags-links" itemprop="keywords"><a href="" rel="tag">{{article.tags}}</a></span>
+                    </footer>
+                 </article>
+            </main>
+        </div>
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,53 @@
+{% extends 'blog_base.html' %}
+{% block title%}
+编辑文章
+{% endblock %}
+{% block extra_head %}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.css">
+<script src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"></script>
+{% endblock %}
+{% block content %}
+<aside class="col-md-2 sidebar"></aside>
+<section class="content-wrap">
+    <div class="container col-md-8">
+        <div class="publish center-block">
+            <form action="{% url 'blog:article_save'%}" method="post">{% csrf_token %}
+                <div>文章标题</div>
+                <input type="text" name="title" class="form-control" placeholder="标题">
+                <div>文章内容</div>
+                <textarea name="content" placeholder="内容..."></textarea>
+                <div>文章标签</div>
+                <input type="text" name="tags" class="form-control" placeholder="标签">
+                <button type="submit" class="btn btn-primary">发 布</button>
+            </form>
+        </div>
+    </div>
+
+    <aside class="col-md-2 sidebar"></aside>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script type="text/javascript">
+
+  $(function(){
+       var simplemde = new SimpleMDE();
+
+      $("button[type='submit']").click(function(){
+			if($.trim($("input[name='title']").val()) == ''){
+				alert("文章标题不能为空!");
+				return false;
+			}
+			if($.trim(simplemde.value()) == ''){
+			    alert("文章内容不能为空!");
+				return false;
+			}
+			if($.trim($("input[name='tags']").val()) == ''){
+				alert("文章标签不能为空!");
+				return false;
+			}
+		});
+  })
+
+</script>
+{% endblock %}

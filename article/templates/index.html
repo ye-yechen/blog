@@ -1,4 +1,7 @@
 {% extends 'blog_base.html' %}
+{% block title%}
+首页
+{% endblock %}
 {% block content %}
 <div id="sliders">
 
@@ -12,33 +15,50 @@
 
             <main class="col-md-7 main-content">
                 {% for article in articles %}
-                <article id= "{{article.id}}" class="post">
+                <article id="{{article.id}}" class="post">
                     <header class="entry-header">
                         <h2 class="entry-title" itemprop="name headline">
-                            <a href="" rel="bookmark">{{ article.title }}</a>
+                            <a href="{% url 'blog:article_detail' article.id %}" rel="">{{ article.title }}</a>
                         </h2>
 
-
                         <div class="entry-meta">
-                            <time class="entry-date" datetime="2016-11-01T13:30:16+00:00" pubdate itemprop="datePublished">{{article.create_time}}</time>
-                            <span class="dot">&bull;</span> <span class="categories-links" itemprop="keywords"><a href="" title="" rel="category tag">分类</a></span>
-                            <span class="dot">&bull;</span> <a href="" class="comments-link"  title="">9 条评论</a>
+                            <time class="entry-date">{{article.create_time}}</time>
+                            <span class="dot">&bull;</span> <span class="categories-links" itemprop="keywords"><a
+                                href="" title="" rel="category tag">分类</a></span>
+                            <span class="dot">&bull;</span> <a href="" class="comments-link" title="">9 条评论</a>
                         </div>
                     </header>
 
                     <div class="entry-summary" itemprop="articleBody">
-						<p id="summary_{{ article.summary }}">
-							{{ article.summary }}
-						</p>
-					</div>
+                        <p id="summary_{{ article.summary }}">
+                        <h5>{{ article.summary }}</h5>
+                        </p>
+                    </div>
 
-                   <footer class="entry-footer">
-					    <a href="" rel="nofollow" class="more-link">全文阅读 &raquo;</a>
-                       <span class="tags-links" itemprop="keywords"><a href="" rel="tag">{{article.tags}}</a></span>
-                   </footer>
+                    <footer class="entry-footer">
+                        <a href="{% url 'blog:article_detail' article.id %}" rel="nofollow" class="more-link">全文阅读 &raquo;</a>
+                        <span class="tags-links" itemprop="keywords"><a href="" rel="tag">{{article.tags}}</a></span>
+                    </footer>
 
                 </article>
                 {% endfor %}
+                <nav>
+                    <ul class="pager">
+                        <li class="current">{{ articles.number }} / {{ articles.paginator.num_pages }}</li>
+                        {% if articles.has_previous %}
+                        <li class="previous"><a href="{{ articles.previous_page_number  }}"><span
+                                aria-hidden="true">&larr;</span> 上一页</a></li>
+                        {% else %}
+                        <li class="previous disabled"><a href=""><span aria-hidden="true">&larr;</span> 上一页</a></li>
+                        {% endif %}
+                        {% if articles.has_next %}
+                        <li class="next"><a href="{{ articles.next_page_number  }}">下一页 <span
+                                aria-hidden="true">&rarr;</span></a></li>
+                        {% else %}
+                        <li class="next disabled"><a href="">下一页 <span aria-hidden="true">&rarr;</span></a></li>
+                        {% endif %}
+                    </ul>
+                </nav>
             </main>
             <aside class="col-md-3 sidebar">
                 <div class="widget"></div>

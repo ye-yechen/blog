@@ -37,67 +37,19 @@ h6 {
 	font-size: 0.75em;
 }
 
-a {
-	color: #808080;
-	outline: none;
-}
-a:hover {
-	color: #808080;
-	text-decoration: none;
-	border-bottom:3px solid #1e90ff;
-	color:#1e90ff
+::selection {
+    background:#16a085;
+    color:#ffb61e;
 }
 
-/* pagination */
-/*====================================================
-	pagination
-====================================================*/
-.pagination {
-	margin: 0 0 35px;
-	text-align: center;
-	display: block;
+::-moz-selection {
+    background:#16a085;
+    color:#ffb61e;
 }
 
-.pagination a {
-	text-align: center;
-	display: inline-block;
-	color: #ffffff;
-	background: #e67e22;
-	border-radius: 2px;
-}
-
-.pagination a a:hover {
-	background: #505050;
-	text-decoration: none;
-	color: #ffffff;
-}
-
-.pagination a i {
-	width: 36px;
-	height: 36px;
-	line-height: 36px;
-}
-
-.pagination .page-number {
-	background: #e67e22;
-	color: #ffffff;
-	margin: 0 3px;
-	display: inline-block;
-	line-height: 36px;
-	padding: 0 14px;
-	border-radius: 2px;
-}
-
-/* prev and next link */
-.prev-next-wrap {
-	margin-bottom: 35px;
-	text-align: center;
-}
-
-.main-footer {
-	background: #ebebeb;
-	padding: 35px 0 0;
-	color: #ebebeb;
+::-webkit-selection {
+    background:#16a085;
+    color:#ffb61e;
 }
 
 .copyright {
@@ -187,6 +139,7 @@ i {
 	padding-top: 80px;
 	padding-bottom: 10px;
 }
+
 .close-slagan{
 	margin-right:20px;
 	margin-bottom:50px;
@@ -196,88 +149,3 @@ i {
 	margin-top:15px;
 }
 
-.select-btn{
-	text-align:right;
-	border:solid 1px;
-	border-color:#000080;
-	border-radius:10px;
-}
-.post .post-content {
-	margin: 10px 0;
-}
-
-.post .post-footer {
-	margin-top: 1px;
-	border-top: 1px solid #959595;
-	padding: 1px 0 0;
-}
-
-.post .post-footer2 {
-	margin-top: 2px;
-	border-top: 1px solid #ebebeb;
-	padding: 2px 0 0;
-}
-
-.post .post-footer .tag-list {
-	color: #959595;
-	line-height: 28px;
-}
-
-.post .post-footer .tag-list a {
-	color: #959595;
-	margin-left: 7px;
-}
-
-.post .post-footer .tag-list a:hover {
-	color: #e67e22;
-}
-/* post content */
-/*====================================================
-  main post content
-====================================================*/
-.post-content {
-	font: 400 18px/1.62 "Georgia", "Xin Gothic", "Hiragino Sans GB",
-		"Droid Sans Fallback", "Microsoft YaHei", sans-serif;
-	color: #444443;
-}
-
-.post-content h1, .post-content h2, .post-content h3, .post-content h4,
-	.post-content h5, .post-content h6 {
-	font-family: "Georgia", "Xin Gothic", "Hiragino Sans GB",
-		"Droid Sans Fallback", "Microsoft YaHei", "SimSun", sans-serif;
-	color: #222223;
-}
-
-.post-content h1 {
-	font-size: 1.8em;
-	margin: 0.67em 0;
-}
-
-.post-content>h1 {
-	margin-top: 0;
-	font-size: 2em;
-}
-
-.post-content h2 {
-	font-size: 1.5em;
-	margin: 0.83em 0;
-}
-
-.post-content h3 {
-	font-size: 1.17em;
-	margin: 1em 0;
-}
-
-.post-content h4, .post-content h5, .post-content h6 {
-	font-size: 1em;
-	margin: 1.6em 0 1em 0;
-}
-
-.post-content h6 {
-	font-weight: 500;
-}
-
-.windows .post-content {
-	font-size: 16px;
-	font-family: "Georgia", "SimSun", sans-serif;
-}
