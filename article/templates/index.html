@@ -22,7 +22,7 @@
                         </h2>
 
                         <div class="entry-meta">
-                            <time class="entry-date">{{article.create_time}}</time>
+                            <time class="entry-date">{{article.create_time|date:"Y-m-d"}}</time>
                             <span class="dot">&bull;</span> <span class="categories-links" itemprop="keywords"><a
                                 href="" title="" rel="category tag">分类</a></span>
                             <span class="dot">&bull;</span> <a href="" class="comments-link" title="">9 条评论</a>
@@ -37,7 +37,7 @@
 
                     <footer class="entry-footer">
                         <a href="{% url 'blog:article_detail' article.id %}" rel="nofollow" class="more-link">全文阅读 &raquo;</a>
-                        <span class="tags-links" itemprop="keywords"><a href="" rel="tag">{{article.tags}}</a></span>
+                        <span class="tags-links"><a href="" rel="tag">{{article.tags}}</a></span>
                     </footer>
 
                 </article>
