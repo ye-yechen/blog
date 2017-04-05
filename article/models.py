@@ -12,7 +12,7 @@ class User(models.Model):
     email = models.CharField(max_length=100)
     notes = models.TextField()  # 备注
     image = models.CharField(max_length=100, blank=True)  # 图像地址
-    gender = models.BooleanField()  # 性别：0->男
+    gender = models.BooleanField(default=False)  # 性别：0->男
     status = models.BooleanField(default=0)  # 账号是否激活
     validate_code = models.CharField(max_length=50, blank=True)  # 激活码
     register_time = models.DateTimeField()

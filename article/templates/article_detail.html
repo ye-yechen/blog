@@ -16,22 +16,24 @@
             <main class="col-md-7 main-content">
                  <article id="{{article.id}}" class="post">
                     <header class="entry-header">
-                        <h2 class="entry-title" itemprop="name headline">
+                        <h2 class="entry-title">
                             {{ article.title }}
                         </h2>
 
                         <div class="entry-meta">
                             <time class="entry-date">{{article.create_time|date:"Y-m-d"}}</time>
-                            <span class="dot">&bull;</span> <span class="categories-links" itemprop="keywords"><a
+                            <span class="dot">&bull;</span> <span class="categories-links"><a
                                 href="" title="" rel="category tag">分类</a></span>
-                            <span class="dot">&bull;</span> <a href="" class="comments-link" title="">9 条评论</a>
+                            <span class="dot">&bull;</span> <a href="" class="comments-link" title="">{{article.read_count}} 次阅读</a>
                         </div>
                     </header>
-                     <div class="entry-content" itemprop="articleBody">
+                     <div class="entry-content">
                           {{ article.content_md|custom_markdown }}
                      </div>
                      <footer class="entry-footer">
-                        <span class="tags-links" itemprop="keywords"><a href="" rel="tag">{{article.tags}}</a></span>
+                         {% for tag in article.tags %}
+                        <span class="tags-links"><a href="" rel="tag">{{tag}}</a></span>
+                         {% endfor %}
                     </footer>
                  </article>
             </main>

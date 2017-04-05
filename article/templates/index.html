@@ -1,6 +1,6 @@
 {% extends 'blog_base.html' %}
 {% block title%}
-首页
+blog | yech.site
 {% endblock %}
 {% block content %}
 <div id="sliders">
@@ -37,7 +37,9 @@
 
                     <footer class="entry-footer">
                         <a href="{% url 'blog:article_detail' article.id %}" rel="nofollow" class="more-link">全文阅读 &raquo;</a>
-                        <span class="tags-links"><a href="" rel="tag">{{article.tags}}</a></span>
+                        {% for tag in article.tags %}
+                        <span class="tags-links"><a href="" rel="tag">{{tag}}</a></span>
+                         {% endfor %}
                     </footer>
 
                 </article>
