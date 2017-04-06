@@ -6,10 +6,12 @@ import datetime
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.core.urlresolvers import reverse_lazy
 from django.views.generic.edit import FormView
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 from forms import RegisterForm
 from django.http import HttpResponseRedirect
-from models import User
+from django.contrib.auth.models import User
+from django.conf import settings as django_settings
+from token import token_confirm
 
 
 def home(request, page=1):
@@ -47,6 +49,7 @@ def save_article(request):  # 保存文章
         content_html=content_html,
         tags=tags,
         summary=summary,
+        user=request.user,
         create_time=create_time,
         update_time=update_time,
     )
@@ -69,17 +72,54 @@ class RegisterView(FormView):
 
     def form_valid(self, form):
         form.save()
-        # name = form.cleaned_data.get('username')
-        # psw = form.cleaned_data.get('password')
-        # user = authenticate(name=name, psw=psw)
-        # login(self.request, user)
         return super(RegisterView, self).form_valid(form)
 
 
+def active_user(request, token):    # 认证激活函数
+    try:
+        username = token_confirm.confirm_validate_token(token)
+    except:
+        username = token_confirm.remove_validate_token(token)
+        users = User.objects.filter(username=username)
+        for user in users:
+            user.delete()
+            return render(request, 'message.html',
+                          {'message': u'对不起，验证链接已经过期，请重新<a href=\"' + unicode(django_settings.DOMAIN) + u'/signup\">注册</a>'})
+    try:
+        user = User.objects.get(username=username)
+    except User.DoesNotExist:
+        return render(request, 'message.html', {'message': u"对不起，您所验证的用户不存在，请重新注册"})
+    user.is_active = True
+    user.save()
+    message = u'验证成功，请进行<a href=\"' + unicode(django_settings.ROOT_URLCONF) + u'/login\">登录</a>操作'
+    return render(request, 'message.html', {'message':message})
 
 
+def login_page(request):
+    redirect_to = request.META.get('HTTP_REFERER', '/')
+    return render(request, 'login.html', {'redirect_to': redirect_to})
 
 
+def login_site(request):    # 登入
+    if request.method == 'POST':
+        # request.META 是一个Python字典，包含了所有本次HTTP请求的Header信息
+        redirect_to = request.POST.get('next')  # 获取隐藏域的值，进行页面跳转
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        user = authenticate(username=username, password=password)  # 使用 Django 的 authenticate 方法来验证
+        if user:
+            login(request, user)
+            return HttpResponseRedirect(redirect_to)
+        else:
+            return render(request, 'login.html', {
+                'login_err': '用户名或者密码不正确'
+            })
+
+
+def logout_site(request):
+    logout(request)
+    redirect_to = request.META.get('HTTP_REFERER', '/')
+    return HttpResponseRedirect(redirect_to)
 
 
 

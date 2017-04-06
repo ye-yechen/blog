@@ -2,23 +2,23 @@
 from __future__ import unicode_literals
 
 from django.db import models
-
+from django.contrib.auth.models import User
 # Create your models here.
 
 
-class User(models.Model):
-    name = models.CharField(max_length=50)
-    psw = models.CharField(max_length=100)
-    email = models.CharField(max_length=100)
-    notes = models.TextField()  # 备注
-    image = models.CharField(max_length=100, blank=True)  # 图像地址
-    gender = models.BooleanField(default=False)  # 性别：0->男
-    status = models.BooleanField(default=0)  # 账号是否激活
-    validate_code = models.CharField(max_length=50, blank=True)  # 激活码
-    register_time = models.DateTimeField()
-
-    def __unicode__(self):
-        return self.name
+# class User(models.Model):
+#     name = models.CharField(max_length=50)
+#     psw = models.CharField(max_length=100)
+#     email = models.CharField(max_length=100)
+#     notes = models.TextField()  # 备注
+#     image = models.CharField(max_length=100, blank=True)  # 图像地址
+#     gender = models.BooleanField(default=False)  # 性别：0->男
+#     status = models.BooleanField(default=0)  # 账号是否激活
+#     validate_code = models.CharField(max_length=50, blank=True)  # 激活码
+#     register_time = models.DateTimeField()
+#
+#     def __unicode__(self):
+#         return self.name
 
 
 class Article(models.Model):

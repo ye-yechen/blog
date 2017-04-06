@@ -3,7 +3,7 @@
     <div class="container-fluid">
         <div class="navbar-header">
             <a class="navbar-brand" href="/blog">
-                <img src="/static/image/logo.png" width="40" title=""/>
+                <img src="/static/image/logo.png" title=""/>
             </a>
         </div>
         <div class="navbar-collapse collapse">
@@ -21,10 +21,13 @@
                 </form>
             </ul>
             <ul class="nav navbar-nav navbar-right">
-                <li><a href="/user/register">注册</a></li>
-                <li id="login-link">
-                    <a data-toggle="modal" data-target="#login" href="#">登入</a>
-                </li>
+                <li><a href="/accounts/register">注册</a></li>
+                {% if request.user.is_authenticated %}
+                <li><a href="">{{request.user.username}}</a></li>
+                <li><a href="/accounts/logout">注销</a></li>
+                {% else %}
+                <li><a href="/accounts/loginpage">登入</a></li>
+                {{% endif %}
             </ul>
         </div>
     </div>

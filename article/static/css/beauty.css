@@ -177,6 +177,11 @@ a.entry-cover:hover img
 	color:#16a085;
 }
 
+.user-img
+{
+	float:right;
+}
+
 .tags-links
 {
 	font-size:12px;

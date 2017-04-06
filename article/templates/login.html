@@ -1,0 +1,60 @@
+{% extends 'blog_base.html' %}
+{% block title%}
+登入 | yech.site
+{% endblock %}
+
+{% block extra_head %}{% endblock %}
+
+{% block content %}
+
+<div class="row">
+    <div class="col-sm-4 col-sm-offset-4 ">
+        <a href="/blog" class="thumbnail">
+            <img src="/static/image/logo.png" title="yech.site">
+        </a>
+    </div>
+</div>
+
+<section class="content-wrap">
+    <div class="container">
+
+        <div class="row">
+            <aside class="col-sm-4 sidebar">
+            </aside>
+            <main class="col-sm-4 main-content">
+
+                <form action="{% url 'blog:login_site' %}" class="form-horizontal" method="post">{% csrf_token %}
+                    <div class="form-group">
+                        <label class="">昵称</label>
+                         <input name="username" type="text" class="form-control" placeholder="昵称" required="" autofocus="">
+                    </div>
+                     <div class="form-group">
+                        <label class="">密码</label>
+                         <input name="password" type="password" class="form-control" placeholder="密码" required="" autofocus="">
+                    </div>
+                    <input type="hidden" name="next" value="{{ redirect_to }}">
+
+                    {% if login_err%}
+                    <div class="jumbotron alert-info slogan">{{ login_err }}</div>
+                    {% endif %}
+
+                    <div class="btn-group btn-group-justified" role="group" aria-label="...">
+                      <div class="btn-group" role="group">
+                        <button type="submit" id="login" class="btn btn-primary">登入</button>
+                      </div>
+                        <div class="btn-group" role="group">
+                        <button type="button" id="forget" class="btn btn-primary">忘记密码</button>
+                      </div>
+                    </div>
+                </form>
+            </main>
+            <aside class="col-sm-4 sidebar">
+            </aside>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block script%}
+
+{% endblock %}

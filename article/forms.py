@@ -1,8 +1,9 @@
 # -*- coding:utf-8 -*-
-# from django.contrib.auth.models import User
+from django.contrib.auth.models import User
 from django import forms
-from models import User
-import datetime
+from token import token_confirm
+from django.conf import settings as django_settings
+from django.core.mail import send_mail
 
 
 class RegisterForm(forms.Form):
@@ -38,7 +39,7 @@ class RegisterForm(forms.Form):
         username = self.cleaned_data['username']
         if ' ' in username or '@' in username:
             raise forms.ValidationError(u'昵称中不能包含空格和@字符')
-        res = User.objects.filter(name=username)
+        res = User.objects.filter(username=username)
         if len(res) != 0:
             raise forms.ValidationError(u'此昵称已经注册，请重新输入')
         return username
@@ -59,9 +60,14 @@ class RegisterForm(forms.Form):
                 raise forms.ValidationError(u'两次密码输入不一致，请重新输入')
 
     def save(self):
-        name = self.cleaned_data['username']
+        username = self.cleaned_data['username']
         email = self.cleaned_data['email']
         psw = self.cleaned_data['password']
-        register_time = datetime.datetime.now()
-        user = User.objects.create(name=name, email=email, psw=psw, register_time=register_time)
+        user = User.objects.create_user(username=username, email=email, password=psw)  # 此方法password字段会经过hash处理
+        user.is_active = False
         user.save()
+        token = token_confirm.generate_validate_token(username)
+        message = "\n".join([u'{0},欢迎加入我的博客'.format(username), u'请访问该链接，完成用户验证:',
+            '/'.join(['127.0.0.1:8000', 'activate', token])])
+        send_mail(u'注册用户验证信息', message, '1522120424@qq.com', [email], fail_silently=False)
+        # return render(request, 'message.html', {'message': u"请登录到注册邮箱中验证用户，有效期为1个小时"})
