@@ -34,10 +34,18 @@ class Article(models.Model):
     deleted = models.BooleanField(default=False)  # 文章是否被删除
     allow_comment = models.BooleanField(default=False)  # 文章是否允许评论
     category = models.CharField(max_length=30,blank=True)
+    comment_nums = models.IntegerField(default=0)  # 此博客的评论条数
 
     def __unicode__(self):
         return self.title
 
 
+class Reply(models.Model):  # 博客的回复
+    author = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)  # 评论者
+    article = models.ForeignKey(Article, on_delete=models.CASCADE, null=True, blank=True)
+    content = models.TextField()
+    reply_time = models.DateTimeField()
 
+    def __unicode__(self):
+        return self.content
 

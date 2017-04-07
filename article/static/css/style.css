@@ -39,17 +39,17 @@ h6 {
 
 ::selection {
     background:#16a085;
-    color:#ffb61e;
+    color:#ffffff;
 }
 
 ::-moz-selection {
     background:#16a085;
-    color:#ffb61e;
+    color:#ffffff;
 }
 
 ::-webkit-selection {
     background:#16a085;
-    color:#ffb61e;
+    color:#ffffff;
 }
 
 .copyright {
@@ -145,4 +145,22 @@ i {
 	margin-bottom:50px;
 	float: right;
 }
+.post {
+	padding: 30px;
+	background: #ffffff;
+	margin-bottom: 30px;
+	position: relative;
+	overflow: hidden;
+}
+.search-bar {
+    border-radius: 5% !important;
+}
 
+.post-comment {
+	margin: 15px 0;
+}
+.post-footer {
+	margin-top: 20px;
+	border-bottom: 1px solid #ebebeb;
+	padding: 4px 0 0;
+}

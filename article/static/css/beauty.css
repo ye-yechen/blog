@@ -180,6 +180,14 @@ a.entry-cover:hover img
 .user-img
 {
 	float:right;
+	border-radius:50%;
+}
+.author-img{
+    float:left;
+    border-radius:50%;
+}
+.reply{
+    float:right;
 }
 
 .tags-links
@@ -466,64 +474,43 @@ body.single .hentry
 	margin:0 0 1em;
 }
 
-.commentlist
-{
-	color:#666;
-	list-style:none;
-	margin:0;
-	padding:0;
-}
-
-.commentlist .comment
+.comment
 {
 	padding-top:1em;
 	border-top:1px dotted #ccc;
 	margin:0 0 1em;
 }
 
-.commentlist .comment-body
+.comment-body
 {
 	position:relative;
 	margin-left:60px;
 }
 
-.commentlist .comment-author .avatar
+.comment-author .avatar
 {
 	position:absolute;
 	top:0;
 	left:-60px;
 	border-radius:3px;
 }
-
-.commentlist .comment-author .fn
+.comment-author .fn
 {
 	color:#16a085;
 	font-style:normal;
 }
-
-.commentlist .comment-author .url
+.comment-author .url
 {
 	color:#16a085;
 	font-weight:700;
 }
 
-.commentlist .bypostauthor>div>div>.fn:after
-{
-	content:"浣滆€�";
-	background:#16a085;
-	border-radius:3px;
-	color:#fff;
-	font-size:12px;
-	margin-left:5px;
-	padding:0 3px;
-}
-
-.commentlist .bypostauthor
+.bypostauthor
 {
 	_border-top:1px solid #16a085;
 }
 
-.commentlist .comment-awaiting-moderation,.commentlist .comment-author time
+.comment-awaiting-moderation, .comment-author time
 {
 	float:right;
 	color:#999;
@@ -531,31 +518,30 @@ body.single .hentry
 	margin-top:-.8em;
 }
 
-.commentlist .comment-content
+.comment-content
 {
 	margin-top:.5em;
 	word-wrap:break-word;
 	word-break:normal;
 }
 
-.commentlist .comment-content p
+.comment-content p
 {
 	margin:0 0 .5em;
 }
-
-.commentlist .comment-content>p:last-child
+.comment-content>p:last-child
 {
 	margin-bottom:.2em;
 }
 
-.commentlist .comment-content pre,.commentlist .comment-content code
+.comment-content pre, .comment-content code
 {
 	background:#e7e7e7;
 	margin:0 .2em;
 	padding:.2em;
 }
 
-.commentlist .comment-footer
+.comment-footer
 {
 	text-align:right;
 	font-size:12px;
@@ -565,20 +551,20 @@ body.single .hentry
 	transition:opacity .3s;
 }
 
-.commentlist .comment-footer a
+.comment-footer a
 {
 	margin-left:1em;
 	color:#16a085;
 }
 
-.commentlist .children
+.children
 {
 	list-style-type:none;
 	margin:1em 0 0 60px;
 	padding:0;
 }
 
-.commentlist .pingback
+.pingback
 {
 	border-top:1px dotted #ccc;
 	text-align:center;
@@ -586,7 +572,7 @@ body.single .hentry
 	padding:20px 0;
 }
 
-.commentlist .pingback p
+.pingback p
 {
 	display:inline;
 	padding-left:24px;
@@ -609,40 +595,6 @@ body.single .hentry
 	margin:.5em 0 -.9em;
 }
 
-#commentform
-{
-	position:relative;
-	z-index:2;
-	clear:both;
-	margin-left:60px;
-	_zoom:1;
-}
-
-#commentform .avatar
-{
-	position:absolute;
-	top:0;
-	left:-60px;
-	float:left;
-	border-radius:3px;
-}
-
-#comment-settings
-{
-	position:absolute;
-	top:100%;
-	right:100px;
-	display:none;
-	width:260px;
-	border:2px solid #16a085;
-	border-radius:3px;
-	background:#fff;
-	box-shadow:0 1px 7px rgba(0,0,0,.2);
-	color:#999;
-	margin:7px 3px 0 0;
-	padding:20px;
-}
-
 #comment-settings.show
 {
 	display:block;
@@ -661,15 +613,6 @@ body.single .hentry
 #comment_mail_notify
 {
 	margin-right:.5em;
-}
-
-#commentform .comment-fields div
-{
-	position:relative;
-	margin-top:-2px;
-	border:2px solid #ddd;
-	background:#fff;
-	padding:7px;
 }
 
 .comment-form-author
@@ -833,30 +776,6 @@ body.single .hentry
 {
 	background-color:#16a085;
 	border-color:#149077;
-}
-
-#commentform :invalid
-{
-	outline:0;
-	box-shadow:none;
-}
-
-#commentform .invalid:after
-{
-	position:absolute;
-	top:50%;
-	right:10px;
-	margin-top:-8px;
-	width:16px;
-	height:16px;
-	border-radius:50%;
-	background:#e74c3c url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAKCAYAAACT+/8OAAAAQUlEQVQI12P4//9/4H8ECGAAEgeRBA5gFZiIJDABJJCIJJAAElBEElAACTBCzTkAxAwgARQMU/EeiD8gC3yECQAAyl+Oh4uXw1EAAAAASUVORK5CYII=) no-repeat 50% 50%;
-	content:"";
-}
-
-.depth-1 #respond
-{
-	margin-left:60px;
 }
 
 .no-comments

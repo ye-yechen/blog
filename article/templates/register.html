@@ -80,9 +80,11 @@
 {% endblock %}
 
 {% block script%}
-	$(function(){
+<script type="text/javascript">
+    $(function(){
 		$("button[id='register']").click(function(){
 			$("#reg_form").submit();
 		});
 	})
+</script>
 {% endblock %}

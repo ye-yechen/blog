@@ -12,6 +12,8 @@ from django.http import HttpResponseRedirect
 from django.contrib.auth.models import User
 from django.conf import settings as django_settings
 from token import token_confirm
+from django.core.urlresolvers import reverse
+from django.shortcuts import redirect
 
 
 def home(request, page=1):
@@ -54,15 +56,21 @@ def save_article(request):  # 保存文章
         update_time=update_time,
     )
     articles = models.Article.objects.all().order_by('-create_time')
+    for article in articles:
+        article.tags = article.tags.split()
     return render(request, 'index.html', {'articles': articles})
 
 
 def article_detail(request, article_id):  # 全文阅读
-    article = models.Article.objects.get(pk=article_id)
+    article = models.Article.objects.get(pk=article_id)  # 查找博客
     article.read_count += 1  # 阅读次数+1
     article.save()
     article.tags = article.tags.split()
-    return render(request, 'article_detail.html', {'article': article})
+
+    replies = models.Reply.objects.filter(article_id=article_id)  # 查找此博客的所有回复
+    # for reply in replies:
+    #     print reply.author.username
+    return render(request, 'article_detail.html', {'article': article, 'replies': replies})
 
 
 class RegisterView(FormView):
@@ -116,10 +124,41 @@ def login_site(request):    # 登入
             })
 
 
-def logout_site(request):
+def logout_site(request):   # 注销
     logout(request)
     redirect_to = request.META.get('HTTP_REFERER', '/')
     return HttpResponseRedirect(redirect_to)
+
+
+def reply(request, article_id): # 评论
+    if request.method == 'POST':
+        article = models.Article.objects.get(pk=article_id)  # 获取此文章
+        reply_time = datetime.datetime.now()
+        content_all = request.POST.get('reply_content')
+        if content_all[0] == '@':   # 表示是回复某个评论(@某个人)
+            user = content_all[1:].split()[0]  # 获取评论框中被@的作者名字
+            user_len = len(user)+1  # 加上@后的长度
+            content = content_all[user_len:]    # 评论内容
+            models.Reply.objects.create(
+                content=content,
+                author=user,
+                article=article,
+                reply_time=reply_time
+            )
+        else:   # 表示直接评论文章
+            content = request.POST.get('reply_content')
+            user = request.user
+            models.Reply.objects.create(
+                content=content,
+                author=user,
+                article=article,
+                reply_time=reply_time
+            )
+    article = models.Article.objects.get(pk=article_id)  # 查找博客
+    article.tags = article.tags.split()
+    replies = models.Reply.objects.filter(article_id=article_id)  # 查找此博客的所有回复
+    return render(request, 'article_detail.html', {'article': article, 'replies': replies})
+
 
 
 

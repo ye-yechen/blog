@@ -19,19 +19,19 @@
                     <header class="entry-header">
                         <h2 class="entry-title">
                             <a href="{% url 'blog:article_detail' article.id %}" rel="">{{ article.title }}</a>
-                            <img src="/static/image/logo.png" class="more-link" title="{{ request.user.username}}">
+                            <img src="/static/image/logo.png" class="user-img" title="{{ article.user.username}}">
                         </h2>
 
                         <div class="entry-meta">
                             <time class="entry-date">{{article.create_time|date:"Y-m-d"}}</time>
                             <span class="dot">&bull;</span> <span class="categories-links"><a
                                 href="" title="" rel="category tag">分类</a></span>
-                            <span class="dot">&bull;</span> <a href="" class="comments-link" title="">9 条评论</a>
+                            <span class="dot">&bull;</span> <a href="" class="comments-link" title="">{{article.comment_nums}} 条评论</a>
                         </div>
                     </header>
 
                     <div class="entry-summary">
-                        <p id="summary_{{ article.summary }}">
+                        <p id="summary_{{ article.id }}">
                         <h5>{{ article.summary }}</h5>
                         </p>
                     </div>
