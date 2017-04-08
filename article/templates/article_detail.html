@@ -24,7 +24,7 @@
                         <div class="entry-meta">
                             <time class="entry-date">{{article.create_time|date:"Y-m-d"}}</time>
                             <span class="dot">&bull;</span> <span class="categories-links"><a
-                                href="" title="" rel="category tag">分类</a></span>
+                                href="" title="" rel="category tag">{{article.category.category_name}}</a></span>
                             <span class="dot">&bull;</span> <a href="" class="comments-link" title="">{{article.read_count}}
                             次阅读</a>
                         </div>
@@ -47,7 +47,7 @@
         <div class="row">
             <aside class="col-md-1 sidebar"></aside>
             <main class="col-md-7 main-content">
-                <div id="comments"><h3 id="comments-title">{{replies|length}} 条评论</h3></div>
+                <div id="comments"><h3 id="comments-title">{{article.comment_nums}} 条评论</h3></div>
 
                 <div class="post" id="reply_{{reply.author.username}}">
                     {% for reply in replies %}
@@ -65,6 +65,7 @@
                     {% endfor %}
                 </div>
 
+                {% if request.user.is_authenticated %}
                 <div id="respond">
                         <form action="{% url 'blog:reply' article.id %}" method="post">{% csrf_token %}
                             <div class="form-group">
@@ -75,6 +76,7 @@
                             </footer>
                         </form>
                     </div>
+                {% endif %}
             </main>
         </div>
     </div>

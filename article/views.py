@@ -12,8 +12,7 @@ from django.http import HttpResponseRedirect
 from django.contrib.auth.models import User
 from django.conf import settings as django_settings
 from token import token_confirm
-from django.core.urlresolvers import reverse
-from django.shortcuts import redirect
+from collections import defaultdict, OrderedDict
 
 
 def home(request, page=1):
@@ -33,12 +32,19 @@ def home(request, page=1):
 
 
 def publish(request):
-    return render(request, 'publish.html')
+    if not request.user.is_authenticated():  # 用户未登录，不能发表文章
+        return render(request, 'login.html')
+    categories = models.Category.objects.all()  # 查询所有分类
+    return render(request, 'publish.html', {'categories': categories})
 
 
 def save_article(request):  # 保存文章
+    if not request.user.is_authenticated():  # 用户未登录，不能发表文章
+        return render(request, 'login.html')
     title = request.POST.get('title')
     content_md = request.POST.get('content')
+    category_name = request.POST.get('category')
+    category = models.Category.objects.get(category_name=category_name)  # 根据名称查找分类
     tags = request.POST.get('tags')
     content_html = markdown.markdown(content_md)
     now = datetime.datetime.now()
@@ -49,6 +55,7 @@ def save_article(request):  # 保存文章
         title=title,
         content_md=content_md,
         content_html=content_html,
+        category=category,
         tags=tags,
         summary=summary,
         user=request.user,
@@ -130,34 +137,64 @@ def logout_site(request):   # 注销
     return HttpResponseRedirect(redirect_to)
 
 
-def reply(request, article_id): # 评论
+def reply(request, article_id):  # 评论
+    if not request.user.is_authenticated():  # 用户未登录，不能发表评论
+        return render(request, 'login.html')
+
     if request.method == 'POST':
         article = models.Article.objects.get(pk=article_id)  # 获取此文章
         reply_time = datetime.datetime.now()
         content_all = request.POST.get('reply_content')
+        author = request.user     # 评论者是当前登录的人
         if content_all[0] == '@':   # 表示是回复某个评论(@某个人)
-            user = content_all[1:].split()[0]  # 获取评论框中被@的作者名字
-            user_len = len(user)+1  # 加上@后的长度
+            who = content_all[1:].split()[0]  # 获取评论框中被@的作者名字
+            user_len = len(who)+1  # 加上@后的长度
             content = content_all[user_len:]    # 评论内容
             models.Reply.objects.create(
-                content=content,
-                author=user,
+                content=content_all,
+                author=author,
                 article=article,
-                reply_time=reply_time
+                reply_time=reply_time,
+                is_comment=False    # 不是评论
             )
         else:   # 表示直接评论文章
             content = request.POST.get('reply_content')
             user = request.user
             models.Reply.objects.create(
                 content=content,
-                author=user,
+                author=author,
                 article=article,
                 reply_time=reply_time
             )
-    article = models.Article.objects.get(pk=article_id)  # 查找博客
-    article.tags = article.tags.split()
-    replies = models.Reply.objects.filter(article_id=article_id)  # 查找此博客的所有回复
-    return render(request, 'article_detail.html', {'article': article, 'replies': replies})
+            article.comment_nums += 1  # 文章评论数+1
+            article.save()
+
+        article.tags = article.tags.split()
+        replies = models.Reply.objects.filter(article_id=article_id)  # 查找此博客的所有回复
+        return render(request, 'article_detail.html', {'article': article, 'replies': replies})
+
+# def archive_tool():  # 文章归档工具方法
+#     # 获取到降序排列的精确到月份且已去重的文章发表时间列表
+#     date_list = models.Article.objects.datetimes('created_time', 'month', order='DESC')
+#     # 并把列表转为一个字典，字典的键为年份，值为该年份下对应的月份列表
+#     date_dict = defaultdict(list)
+#     for d in date_list:
+#         date_dict[d.year].append(d.month)   # [(2017,[04,02,01]),(2016,[12,10,06,01]),...]
+#     # 模板不支持defaultdict，因此我们把它转换成一个二级列表，由于字典转换后无序，因此重新降序排序
+#     return sorted(date_dict.items(), reverse=True)
+
+
+def archive(request):
+    # 获取到降序排列的精确到月份且已去重的文章发表时间列表
+    date_list = models.Article.objects.datetimes('created_time', 'month', order='DESC')
+    article_dict = OrderedDict([])
+    for date in date_list:
+        year = date.get('year')
+        month = date.get('month')
+        article_list = models.Article.objects.filter(create_time__year=year, create_time__month=month)
+        article_dict[date] = article_list   # 每个year-month对应的文章列表
+
+    return render(request, 'archive.html', {'data_list': date_list, 'article_dict': article_dict})
 
 
 

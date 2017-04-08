@@ -16,9 +16,21 @@
                 <input type="text" name="title" class="form-control" placeholder="标题">
                 <div>文章内容</div>
                 <textarea name="content" placeholder="内容..."></textarea>
+
+                <div>文章分类</div>
+                 <div class="btn-group">
+                    <a class="btn btn-primary dropdown-toggle" data-toggle="dropdown" href="javascript:viod(0)">
+                        选择分类 <span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        {% for category in categories %}
+                            <li><a href="javascript:viod(0)">{{category.category_name}}</a></li>
+                        {% endfor %}
+                    </ul>
+                  </div>
+                <input type="hidden" name="category" value="未分类">
                 <div>文章标签</div>
                 <input type="text" name="tags" class="form-control" placeholder="标签">
-                <button type="submit" class="btn btn-primary">发 布</button>
+                <button type="submit" class="btn btn-primary reply">发 布</button>
             </form>
         </div>
     </div>
@@ -47,6 +59,11 @@
 				return false;
 			}
 		});
+		$(".dropdown-menu li a").click(function(){
+              var selText = $(this).text();
+              $(this).parents('.btn-group').find('.dropdown-toggle').html(selText+' <span class="caret"></span>');
+              var t = $("input[name='category']").val(selText);
+        });
   })
 
 </script>
