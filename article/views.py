@@ -173,30 +173,33 @@ def reply(request, article_id):  # 评论
         replies = models.Reply.objects.filter(article_id=article_id)  # 查找此博客的所有回复
         return render(request, 'article_detail.html', {'article': article, 'replies': replies})
 
+
 # def archive_tool():  # 文章归档工具方法
 #     # 获取到降序排列的精确到月份且已去重的文章发表时间列表
 #     date_list = models.Article.objects.datetimes('created_time', 'month', order='DESC')
 #     # 并把列表转为一个字典，字典的键为年份，值为该年份下对应的月份列表
-#     date_dict = defaultdict(list)
+#     date_dict = defaultdict(date_list)
 #     for d in date_list:
 #         date_dict[d.year].append(d.month)   # [(2017,[04,02,01]),(2016,[12,10,06,01]),...]
 #     # 模板不支持defaultdict，因此我们把它转换成一个二级列表，由于字典转换后无序，因此重新降序排序
 #     return sorted(date_dict.items(), reverse=True)
 
 
-def archive(request):
-    # 获取到降序排列的精确到月份且已去重的文章发表时间列表
-    date_list = models.Article.objects.datetimes('created_time', 'month', order='DESC')
-    article_dict = OrderedDict([])
+def archive(request):   # 文章归档
+    date_list = models.Article.objects.datetimes('create_time', 'month', order='DESC')
+    article_dict = OrderedDict()
     for date in date_list:
-        year = date.get('year')
-        month = date.get('month')
+        year = int(date.year)
+        month = int(date.month)
         article_list = models.Article.objects.filter(create_time__year=year, create_time__month=month)
-        article_dict[date] = article_list   # 每个year-month对应的文章列表
-
+        # article_dict.setdefault(date, []).append(article_list)
+        article_dict[date] = article_list
     return render(request, 'archive.html', {'data_list': date_list, 'article_dict': article_dict})
 
 
+def search_archive(request, year, month):   # 根据年月查询归档文章
+    articles = models.Article.objects.filter(create_time__year=year, create_time__month=month)
+    return render(request, 'archive_detail.html', {'articles': articles, 'year': year, 'month': month})
 
 
 

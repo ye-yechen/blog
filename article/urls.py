@@ -12,5 +12,7 @@ urlpatterns = [
     url(r'^accounts/loginpage$', views.login_page, name='login'),
     url(r'^accounts/login$', views.login_site, name='login_site'),
     url(r'^accounts/logout$', views.logout_site, name='logout'),
-    url(r'^article/reply/(?P<article_id>\d+)$', views.reply, name='reply')
+    url(r'^article/reply/(?P<article_id>\d+)$', views.reply, name='reply'),
+    url(r'^article/archive$', views.archive, name='archive'),
+    url(r'^article/archive/(?P<year>\d+)/(?P<month>\d+)$', views.search_archive, name='search_archive')
 ]

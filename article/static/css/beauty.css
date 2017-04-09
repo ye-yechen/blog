@@ -133,6 +133,9 @@ a.entry-cover:hover img
 	font-size:1.7em;
 	margin:0;
 }
+.archive-title{
+    text-align:center;
+}
 
 .entry-title a
 {
@@ -422,42 +425,6 @@ body.single .tags-links
 body.single .hentry
 {
 	margin-bottom:10px;
-}
-
-#error404 .code
-{
-	font-size:180px;
-	text-align:center;
-	color:#999;
-}
-
-#error404 h1
-{
-	margin-bottom:0;
-	font-weight:400;
-	font-size:31px;
-}
-
-#error404 h3
-{
-	color:#ccc;
-	font-weight:400;
-	font-size:18px;
-	margin:.5em 0;
-}
-
-#error404 ul
-{
-	list-style:none;
-	line-height:2;
-	margin:0;
-	padding:0;
-}
-
-#error404 li
-{
-	display:inline;
-	margin:0 .5em;
 }
 
 #comments
@@ -925,6 +892,17 @@ body.single .hentry
 	left:-40px;
 	width:30px;
 	height:30px;
+}
+
+.page-title {
+    display: inline-block;
+    margin: 0 0 20px;
+    padding: .3em .5em;
+    border-radius: 3px;
+    background: #16a085;
+    color: #fff;
+    font-weight: 400;
+    font-size: 24px;
 }
 
 #respond,.widget

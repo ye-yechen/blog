@@ -1,0 +1,58 @@
+{% extends 'blog_base.html' %}
+{% block title%}
+{{year}}年{{month}}月 归档 | yech.site
+{% endblock %}
+{% block content %}
+<div class="post-header"></div>
+<section class="content-wrap">
+    <div class="container">
+        <div class="row">
+            <aside class="col-md-1 sidebar">
+            </aside>
+
+            <main class="col-md-7 main-content">
+                <header class="page-header">
+                    <h1 class="page-title">月度归档: {{year}}年{{month}}月</h1>
+                </header>
+                {% for article in articles %}
+                <article id="{{article.id}}" class="post">
+                    <header class="entry-header">
+                        <h2 class="entry-title">
+                            <a href="{% url 'blog:article_detail' article.id %}" rel="">{{ article.title }}</a>
+                            <img src="/static/image/logo.png" class="user-img" title="{{ article.user.username}}">
+                        </h2>
+
+                        <div class="entry-meta">
+                            <time class="entry-date">{{article.create_time|date:"Y-m-d"}}</time>
+                            <span class="dot">&bull;</span> <span class="categories-links"><a
+                                href="" title="" rel="category tag">{{article.category.category_name}}</a></span>
+                            <span class="dot">&bull;</span> <a href="" class="comments-link" title="">{{article.comment_nums}} 条评论</a>
+                        </div>
+                    </header>
+
+                    <div class="entry-summary">
+                        <p id="summary_{{ article.id }}">
+                        <h5>{{ article.summary }}</h5>
+                        </p>
+                    </div>
+
+                    <footer class="entry-footer">
+                        <a href="{% url 'blog:article_detail' article.id %}" rel="nofollow" class="more-link">全文阅读 &raquo;</a>
+                        {% for tag in article.tags %}
+                        <span class="tags-links"><a href="" rel="tag">{{tag}}</a></span>
+                         {% endfor %}
+                    </footer>
+
+                </article>
+                {% endfor %}
+            </main>
+            <aside class="col-md-3 sidebar">
+                <header class="page-header">
+                    <div class="page-title">占位符</div>
+                </header>
+                <div class="widget"></div>
+            </aside>
+        </div>
+    </div>
+</section>
+{% endblock %}
