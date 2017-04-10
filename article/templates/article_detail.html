@@ -39,6 +39,9 @@
                     </footer>
                 </article>
             </main>
+            <aside class="col-md-3 sidebar">
+                <div class="widget"></div>
+            </aside>
         </div>
     </div>
 </section>
@@ -56,7 +59,10 @@
                             <img src="/static/image/logo.png" class="author-img">
                             <cite class="fn url">{{reply.author.username}}</cite>
                             <time>{{reply.reply_time|date:'Y-m-d'}}</time>
-                            <time><a href="javascript:viod(0)" name="reply">回复&nbsp;&nbsp;</a></time>
+                            <time><a href="javascript:viod(0)" name="reply">回复</a>
+                                <span class="dot">&bull;</span>
+                            </time>
+
                         </div>
                         <div class="comment-content">
                             <p>{{reply.content}}</p>
@@ -78,6 +84,18 @@
                     </div>
                 {% endif %}
             </main>
+            <aside class="col-md-3 sidebar">
+                <div class="widget">
+                    <header class="entry-header">
+                        <h1 class="page-title">标签云</h1>
+                    </header>
+                    <div class="">
+                        {% for tag_info in tag_info_list %}
+                        <a href="" style="font-size:{{tag_info.tag_size}}px; color:{{tag_info.tag_color}}">{{tag_info.tag_name}}</a>
+                        {% endfor %}
+                    </div>
+                </div>
+            </aside>
         </div>
     </div>
 </section>

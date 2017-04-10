@@ -45,23 +45,7 @@
 
                 </article>
                 {% endfor %}
-                <nav>
-                    <ul class="pager">
-                        <li class="current">{{ articles.number }} / {{ articles.paginator.num_pages }}</li>
-                        {% if articles.has_previous %}
-                        <li class="previous"><a href="{{ articles.previous_page_number  }}"><span
-                                aria-hidden="true">&larr;</span> 上一页</a></li>
-                        {% else %}
-                        <li class="previous disabled"><a href=""><span aria-hidden="true">&larr;</span> 上一页</a></li>
-                        {% endif %}
-                        {% if articles.has_next %}
-                        <li class="next"><a href="{{ articles.next_page_number  }}">下一页 <span
-                                aria-hidden="true">&rarr;</span></a></li>
-                        {% else %}
-                        <li class="next disabled"><a href="">下一页 <span aria-hidden="true">&rarr;</span></a></li>
-                        {% endif %}
-                    </ul>
-                </nav>
+
             </main>
             <aside class="col-md-3 sidebar">
                 <div class="widget"></div>

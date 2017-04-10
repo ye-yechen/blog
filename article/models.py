@@ -24,6 +24,7 @@ from django.contrib.auth.models import User
 class Tag(models.Model):    # 标签类
     tag_name = models.CharField(max_length=20)
     create_time = models.DateTimeField()
+    tag_desc = models.CharField(max_length=20, blank=True)
 
     def __unicode__(self):
         return self.tag_name
@@ -32,6 +33,7 @@ class Tag(models.Model):    # 标签类
 class Category(models.Model):   # 文章分类
     category_name = models.CharField(max_length=20)
     create_time = models.DateTimeField()
+    category_desc = models.CharField(max_length=20, blank=True)
 
     def __unicode__(self):
         return self.category_name
@@ -44,7 +46,7 @@ class Article(models.Model):
     content_html = models.TextField()  # html格式的内容
     read_count = models.IntegerField(default=0)  # 阅读次数
     summary = models.CharField(max_length=300)  # 摘要
-    tags = models.CharField(max_length=30, blank=True)  # 标签
+    tags = models.CharField(max_length=30, blank=True)  # 标签(过时的)
     tags_2 = models.ManyToManyField(Tag, verbose_name='tags', blank=True)
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, blank=True)  # 分类
     create_time = models.DateTimeField()  # 只在第一次创建model时更新时间

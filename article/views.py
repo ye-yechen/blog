@@ -1,10 +1,11 @@
 # -*- coding:utf-8 -*-
+from django.db.models import Count, Max, Min
 from django.shortcuts import render, render_to_response
 import models
+from models import Article, Reply, Tag, Category
 import markdown
 import datetime
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
-from django.core.urlresolvers import reverse_lazy
 from django.views.generic.edit import FormView
 from django.contrib.auth import authenticate, login, logout
 from forms import RegisterForm
@@ -13,10 +14,36 @@ from django.contrib.auth.models import User
 from django.conf import settings as django_settings
 from token import token_confirm
 from collections import defaultdict, OrderedDict
+from tag_cloud import TagCloud, TagInfo
+
+
+# def get_tag_article_nums():    # 查询各标签以及含此标签的文章数量
+#     tags = Tag.objects.annotate(articles_count=Count('article'))
+#     return tags
+
+
+def get_tag_info():     # 封装标签信息
+    tag_list = Tag.objects.annotate(articles_count=Count('article'))  # 统计标签制作标签云
+    tag_info_list = []
+    max_ref = 0
+    min_ref = float('inf')
+    for tag in tag_list:
+        if tag.articles_count > max_ref:
+            max_ref = tag.articles_count
+        if tag.articles_count < min_ref:
+            min_ref = tag.articles_count
+
+    tag_cloud = TagCloud(min_ref, max_ref)
+    for tag in tag_list:
+        tag_size = tag_cloud.get_tag_font_size(tag.articles_count)
+        tag_color = tag_cloud.get_tag_color(tag.articles_count)
+        tag_info = TagInfo(tag.tag_name, tag_size, tag_color, tag.articles_count)
+        tag_info_list.append(tag_info)
+    return tag_info_list
 
 
 def home(request, page=1):
-    articles = models.Article.objects.all().order_by('-create_time')
+    articles = Article.objects.all().order_by('-create_time')
     # 分页
     paginator = Paginator(articles, 15)  # 每页15项
     try:
@@ -28,14 +55,35 @@ def home(request, page=1):
 
     for article in articles:
         article.tags = article.tags.split()
-    return render(request, 'index.html', {'articles': articles})
+
+    tag_info_list = get_tag_info()
+
+    return render(request, 'index.html', {'articles': articles, 'tag_info_list': tag_info_list})
 
 
-def publish(request):
+def publish(request):   # 发表文章
     if not request.user.is_authenticated():  # 用户未登录，不能发表文章
         return render(request, 'login.html')
-    categories = models.Category.objects.all()  # 查询所有分类
+    categories = Category.objects.all()  # 查询所有分类
     return render(request, 'publish.html', {'categories': categories})
+
+
+def save_tags(tags):    # 构造标签,返回标签类列表
+    tag_names = tags.split()
+    now = datetime.datetime.now()
+    tag_list = []
+    for tag_name in tag_names:
+        # 查询数据库是否有这个tag(不能用get方法，因为如果数据库无记录，get方法会报错)
+        tag = Tag.objects.filter(tag_name=tag_name)
+        if tag:
+            tag_list.append(tag[0])
+        else:
+            tag = Tag.objects.create(
+                tag_name=tag_name,
+                create_time=now
+            )
+            tag_list.append(tag)
+    return tag_list
 
 
 def save_article(request):  # 保存文章
@@ -44,14 +92,14 @@ def save_article(request):  # 保存文章
     title = request.POST.get('title')
     content_md = request.POST.get('content')
     category_name = request.POST.get('category')
-    category = models.Category.objects.get(category_name=category_name)  # 根据名称查找分类
+    category = Category.objects.get(category_name=category_name)  # 根据名称查找分类
     tags = request.POST.get('tags')
     content_html = markdown.markdown(content_md)
     now = datetime.datetime.now()
     create_time = now
     update_time = now
     summary = content_md[:50]
-    models.Article.objects.create(
+    article = Article.objects.create(
         title=title,
         content_md=content_md,
         content_html=content_html,
@@ -62,22 +110,29 @@ def save_article(request):  # 保存文章
         create_time=create_time,
         update_time=update_time,
     )
-    articles = models.Article.objects.all().order_by('-create_time')
+    # 构造标签对象
+    tag_list = save_tags(tags)
+    for tag in tag_list:    # 依次给文章添加标签
+        article.tags_2.add(tag)
+    article.save()
+    articles = Article.objects.all().order_by('-create_time')
+    tag_info_list = get_tag_info()
     for article in articles:
         article.tags = article.tags.split()
-    return render(request, 'index.html', {'articles': articles})
+    return render(request, 'index.html', {'articles': articles, 'tag_info_list': tag_info_list})
 
 
 def article_detail(request, article_id):  # 全文阅读
-    article = models.Article.objects.get(pk=article_id)  # 查找博客
+    article = Article.objects.get(pk=article_id)  # 查找博客
     article.read_count += 1  # 阅读次数+1
     article.save()
     article.tags = article.tags.split()
 
     replies = models.Reply.objects.filter(article_id=article_id)  # 查找此博客的所有回复
+    tag_info_list = get_tag_info()
     # for reply in replies:
     #     print reply.author.username
-    return render(request, 'article_detail.html', {'article': article, 'replies': replies})
+    return render(request, 'article_detail.html', {'article': article, 'replies': replies, 'tag_info_list': tag_info_list})
 
 
 class RegisterView(FormView):
@@ -142,7 +197,7 @@ def reply(request, article_id):  # 评论
         return render(request, 'login.html')
 
     if request.method == 'POST':
-        article = models.Article.objects.get(pk=article_id)  # 获取此文章
+        article = Article.objects.get(pk=article_id)  # 获取此文章
         reply_time = datetime.datetime.now()
         content_all = request.POST.get('reply_content')
         author = request.user     # 评论者是当前登录的人
@@ -160,7 +215,7 @@ def reply(request, article_id):  # 评论
         else:   # 表示直接评论文章
             content = request.POST.get('reply_content')
             user = request.user
-            models.Reply.objects.create(
+            Reply.objects.create(
                 content=content,
                 author=author,
                 article=article,
@@ -170,7 +225,7 @@ def reply(request, article_id):  # 评论
             article.save()
 
         article.tags = article.tags.split()
-        replies = models.Reply.objects.filter(article_id=article_id)  # 查找此博客的所有回复
+        replies = Reply.objects.filter(article_id=article_id)  # 查找此博客的所有回复
         return render(request, 'article_detail.html', {'article': article, 'replies': replies})
 
 
@@ -186,20 +241,45 @@ def reply(request, article_id):  # 评论
 
 
 def archive(request):   # 文章归档
-    date_list = models.Article.objects.datetimes('create_time', 'month', order='DESC')
+    date_list = Article.objects.datetimes('create_time', 'month', order='DESC')
     article_dict = OrderedDict()
     for date in date_list:
         year = int(date.year)
         month = int(date.month)
-        article_list = models.Article.objects.filter(create_time__year=year, create_time__month=month)
+        article_list = Article.objects.filter(create_time__year=year, create_time__month=month)
         # article_dict.setdefault(date, []).append(article_list)
         article_dict[date] = article_list
     return render(request, 'archive.html', {'data_list': date_list, 'article_dict': article_dict})
 
 
 def search_archive(request, year, month):   # 根据年月查询归档文章
-    articles = models.Article.objects.filter(create_time__year=year, create_time__month=month)
+    articles = Article.objects.filter(create_time__year=year, create_time__month=month)
+    for article in articles:
+        article.tags = article.tags.split()
     return render(request, 'archive_detail.html', {'articles': articles, 'year': year, 'month': month})
+
+
+def search_category(request, category_name, page=1):    # 搜索相同分类的文章
+    # category_name = category_name.decode().encode('utf-8')
+    # category = Category.objects.get(category_name=category_name)
+    # articles = Article.objects.filter(category=category)
+    articles = Category.objects.get(category_name=category_name).article_set.all()  # 此语句与以上两条等效
+    # 分页
+    paginator = Paginator(articles, 15)  # 每页15项
+    try:
+        articles = paginator.page(page)
+    except PageNotAnInteger:
+        articles = paginator.page(1)
+    except EmptyPage:
+        articles = paginator.page(paginator.num_pages)
+
+    for article in articles:
+        article.tags = article.tags.split()
+
+    tag_info_list = get_tag_info()
+    return render(request, 'index.html', {'articles': articles, 'tag_info_list': tag_info_list})
+
+
 
 
 
