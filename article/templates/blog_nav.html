@@ -5,23 +5,29 @@
             <a class="" href="/blog">
                 <img src="/static/image/logo.png" title="www.yech.site"/>
             </a>
+            <span class="label label-primary logo-title">那个人好像一只狗</span>
         </div>
         <div class="navbar-collapse collapse">
             <ul class="nav navbar-nav navbar-respond">
                 <li><a href="/blog">首页</a></li>
+                <li><a href="">文章分类</a></li>
                 <li><a href="/article/archive">文章归档</a></li>
                 {% if user.is_authenticated %}
                 <li><a id="" href="/article/publish">写文章</a></li>
+                <li><a href="">关于</a></li>
+                <li><a href="">友链</a></li>
+                <li><a href="">留言板</a></li>
                 {% endif %}
+
             </ul>
-            <ul class="nav navbar-nav navbar-respond">
-                <form action="" method="post" target="_blank" class="navbar-form navbar-right">
-                    <div class="form-group" style="width: 245px;">
-                        <input name="" type="text" class="form-control search-bar" placeholder="文章...">
-                        <i class=""></i>
-                    </div>
-                </form>
-            </ul>
+            <!--<ul class="nav navbar-nav navbar-respond">-->
+                <!--<form action="" method="post" target="_blank" class="navbar-form navbar-right">-->
+                    <!--<div class="form-group" style="width: 245px;">-->
+                        <!--<input name="" type="text" class="form-control search-bar" placeholder="文章...">-->
+                        <!--<i class=""></i>-->
+                    <!--</div>-->
+                <!--</form>-->
+            <!--</ul>-->
             <ul class="nav navbar-nav navbar-right">
                 <li><a href="/accounts/register">注册</a></li>
                 {% if request.user.is_staff %}

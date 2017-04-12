@@ -14,7 +14,7 @@ urlpatterns = [
     url(r'^accounts/logout$', views.logout_site, name='logout'),
     url(r'^article/reply/(?P<article_id>\d+)$', views.reply, name='reply'),
     url(r'^article/archive$', views.archive, name='archive'),
-    url(r'^article/archive/(?P<year>\d+)/(?P<month>\d+)$', views.search_archive, name='search_archive'),
-url(r'^article/category/(?P<category_name>\w+)$', views.search_category, name='search_category'),
-    url(r'^article/category/(?P<category_name>\w+)/(?P<page>\d+)$', views.search_category, name='search_category')
+    url(r'^article/archive/(?P<year>\d+)/(?P<month>\d+)/(?P<page>\d+)$', views.search_archive, name='search_archive'),
+    url(r'^article/category/(?P<category_name>.+)/(?P<page>\d+)$', views.search_category, name='search_category'),
+    url(r'^article/tag/(?P<tag_name>.+)/(?P<page>\d+)$', views.search_tag, name='search_tag'),
 ]

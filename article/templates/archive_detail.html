@@ -25,8 +25,8 @@
                         <div class="entry-meta">
                             <time class="entry-date">{{article.create_time|date:"Y-m-d"}}</time>
                             <span class="dot">&bull;</span> <span class="categories-links"><a
-                                href="" title="" rel="category tag">{{article.category.category_name}}</a></span>
-                            <span class="dot">&bull;</span> <a href="" class="comments-link" title="">{{article.comment_nums}} 条评论</a>
+                                href="{% url 'blog:search_category' article.category.category_name 1%}" title="" rel="category tag">{{article.category.category_name}}</a></span>
+                            <span class="dot">&bull;</span> <a href="#" class="comments-link" title="">{{article.comment_nums}} 条评论</a>
                         </div>
                     </header>
 
@@ -39,12 +39,29 @@
                     <footer class="entry-footer">
                         <a href="{% url 'blog:article_detail' article.id %}" rel="nofollow" class="more-link">全文阅读 &raquo;</a>
                         {% for tag in article.tags %}
-                        <span class="tags-links"><a href="" rel="tag">{{tag}}</a></span>
+                        <span class="tags-links"><a href="{% url 'blog:search_tag' tag 1%}" rel="tag">{{tag}}</a></span>
                          {% endfor %}
                     </footer>
 
                 </article>
                 {% endfor %}
+                <nav>
+                    <ul class="pager">
+                        <li class="current">{{ articles.number }} / {{ articles.paginator.num_pages }}</li>
+                        {% if articles.has_previous %}
+                        <li class="previous"><a href="{{ articles.previous_page_number  }}"><span
+                                aria-hidden="true">&larr;</span> 上一页</a></li>
+                        {% else %}
+                        <li class="previous disabled"><a href=""><span aria-hidden="true">&larr;</span> 上一页</a></li>
+                        {% endif %}
+                        {% if articles.has_next %}
+                        <li class="next"><a href="{{ articles.next_page_number  }}">下一页 <span
+                                aria-hidden="true">&rarr;</span></a></li>
+                        {% else %}
+                        <li class="next disabled"><a href="">下一页 <span aria-hidden="true">&rarr;</span></a></li>
+                        {% endif %}
+                    </ul>
+                </nav>
             </main>
             <aside class="col-md-3 sidebar">
                 <header class="page-header">

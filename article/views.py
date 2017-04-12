@@ -58,7 +58,7 @@ def home(request, page=1):
 
     tag_info_list = get_tag_info()
 
-    return render(request, 'index.html', {'articles': articles, 'tag_info_list': tag_info_list})
+    return render(request, 'index.html', {'html_title': '首页', 'articles': articles, 'tag_info_list': tag_info_list})
 
 
 def publish(request):   # 发表文章
@@ -119,7 +119,7 @@ def save_article(request):  # 保存文章
     tag_info_list = get_tag_info()
     for article in articles:
         article.tags = article.tags.split()
-    return render(request, 'index.html', {'articles': articles, 'tag_info_list': tag_info_list})
+    return render(request, 'index.html', {'html_title': '首页', 'articles': articles, 'tag_info_list': tag_info_list})
 
 
 def article_detail(request, article_id):  # 全文阅读
@@ -252,18 +252,26 @@ def archive(request):   # 文章归档
     return render(request, 'archive.html', {'data_list': date_list, 'article_dict': article_dict})
 
 
-def search_archive(request, year, month):   # 根据年月查询归档文章
-    articles = Article.objects.filter(create_time__year=year, create_time__month=month)
+def search_archive(request, year, month, page=1):   # 根据年月查询归档文章
+    articles = Article.objects.filter(create_time__year=year, create_time__month=month).order_by('-create_time')
+    # 分页
+    paginator = Paginator(articles, 15)  # 每页15项
+    try:
+        articles = paginator.page(page)
+    except PageNotAnInteger:
+        articles = paginator.page(1)
+    except EmptyPage:
+        articles = paginator.page(paginator.num_pages)
     for article in articles:
         article.tags = article.tags.split()
     return render(request, 'archive_detail.html', {'articles': articles, 'year': year, 'month': month})
 
 
-def search_category(request, category_name, page=1):    # 搜索相同分类的文章
+def search_category(request, category_name, page=1):    # 搜索相同分类的文章并分页显示
     # category_name = category_name.decode().encode('utf-8')
     # category = Category.objects.get(category_name=category_name)
     # articles = Article.objects.filter(category=category)
-    articles = Category.objects.get(category_name=category_name).article_set.all()  # 此语句与以上两条等效
+    articles = Category.objects.get(category_name=category_name).article_set.all().order_by('-create_time')  # 此语句与以上两条等效
     # 分页
     paginator = Paginator(articles, 15)  # 每页15项
     try:
@@ -277,10 +285,25 @@ def search_category(request, category_name, page=1):    # 搜索相同分类的�
         article.tags = article.tags.split()
 
     tag_info_list = get_tag_info()
-    return render(request, 'index.html', {'articles': articles, 'tag_info_list': tag_info_list})
+    return render(request, 'index.html', {'html_title': category_name, 'articles': articles, 'tag_info_list': tag_info_list})
 
 
+def search_tag(request, tag_name, page=1):  # 搜索相同标签的文章并分页显示
+    articles = Tag.objects.get(tag_name=tag_name).article_set.all().order_by('-create_time')
+    # 分页
+    paginator = Paginator(articles, 15)  # 每页15项
+    try:
+        articles = paginator.page(page)
+    except PageNotAnInteger:
+        articles = paginator.page(1)
+    except EmptyPage:
+        articles = paginator.page(paginator.num_pages)
 
+    for article in articles:
+        article.tags = article.tags.split()
+
+    tag_info_list = get_tag_info()
+    return render(request, 'index.html', {'html_title': tag_name, 'articles': articles, 'tag_info_list': tag_info_list})
 
 
 

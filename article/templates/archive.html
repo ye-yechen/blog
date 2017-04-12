@@ -18,7 +18,7 @@
                         <ul>
                             {% for date in data_list %}
                                 <li>
-                                    <b><a href="">{{date.year}}年{{date.month}}月</a></b>
+                                    <b><a href="{% url 'blog:search_archive' date.year date.month 1%}">{{date.year}}年{{date.month}}月</a></b>
                                     <span>({{article_dict|get_dict_item:date|length}} 篇文章)</span>
                                     <ul>
                                         {% for article in article_dict|get_dict_item:date %}
