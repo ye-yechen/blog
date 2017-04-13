@@ -71,3 +71,10 @@ class Reply(models.Model):  # 博客的回复
         return self.content
 
 
+class Message(models.Model):    # 留言
+    author = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)  # 留言者
+    content = models.TextField()
+    message_time = models.DateTimeField()
+
+    def __unicode__(self):
+        return self.content

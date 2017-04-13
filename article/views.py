@@ -1,8 +1,8 @@
 # -*- coding:utf-8 -*-
-from django.db.models import Count, Max, Min
-from django.shortcuts import render, render_to_response
+from django.db.models import Count
+from django.shortcuts import render
 import models
-from models import Article, Reply, Tag, Category
+from models import Article, Reply, Tag, Category, Message
 import markdown
 import datetime
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
@@ -305,5 +305,20 @@ def search_tag(request, tag_name, page=1):  # 搜索相同标签的文章并分�
     tag_info_list = get_tag_info()
     return render(request, 'index.html', {'html_title': tag_name, 'articles': articles, 'tag_info_list': tag_info_list})
 
+
+def about(request):     # 关于页面
+    return render(request, 'about.html')
+
+
+def message_board(request):     # 留言页面
+    if request.method == 'POST':
+        message_content = request.POST.get('message_content')
+        Message.objects.create(
+            content=message_content,
+            author=request.user,
+            message_time=datetime.datetime.now()
+        )
+    messages = Message.objects.all().order_by('-message_time')
+    return render(request, 'message_board.html', {'messages': messages})
 
 

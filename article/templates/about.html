@@ -1,0 +1,60 @@
+{% extends 'blog_base.html' %}
+{% load get_dict_item %}
+{% block title%}
+关于 | yech.site
+{% endblock %}
+{% block content %}
+<section class="content-wrap">
+    <div class="container">
+        <div class="row">
+            <aside class="col-md-1 sidebar">
+            </aside>
+            <main class="col-md-8 main-content">
+                <article  class="post">
+                    <header class="entry-header">
+                        <h1 class="entry-title archive-title">关于我</h1>
+                    </header>
+                    <div class="entry-content">
+                        <p style="text-align: center;">热爱技术，渴望进步</p>
+                        <p style="text-align: center;">
+                            <span style="color: rgb(153,153,153);font-family: 宋体, Arial, Helvetica, sans-serif;
+                                line-height: 40px;">
+                                曾经靠近它，那么近。I have a dream.
+                            </span>
+                        </p>
+                        <p style="text-align: center;">
+                            <div class="row">
+                              <div class="">
+                                <div href="#" class="thumbnail">
+                                  <img src="/static/image/chen.png" title="www.yech.site">
+                                </div>
+                              </div>
+                            </div>
+                        </p>
+                        <h4>关于我</h4>
+                        <pre style="border-radius: 3px;padding: 1em;color: #fff;background: #272822;
+                                 word-wrap: normal;">
+                            {
+                                "name": /yechoor/,
+                                "contact": {
+                                    "email":"yechoor@yech.site"
+                                }
+                                "locality": "HanZhou",
+                                "skills": ["JAVA", "PYTHON", "JAVASCRIPT", "C", "C++"],
+                                "tags": ["loser"]
+                            }
+                        </pre>
+                        <h4>博客大事件</h4>
+                        <ul>
+                            <li>
+                                2017/04/13 博客成型
+                            </li>
+                        </ul>
+                    </div>
+                </article>
+            </main>
+        </div>
+    </div>
+</section>
+
+{% endblock %}

@@ -2,21 +2,31 @@
      data-nav="#">
     <div class="container-fluid">
         <div class="navbar-header">
-            <a class="" href="/blog">
+            <a class="" href="{% url 'blog:index' %}">
                 <img src="/static/image/logo.png" title="www.yech.site"/>
             </a>
             <span class="label label-primary logo-title">那个人好像一只狗</span>
         </div>
         <div class="navbar-collapse collapse">
             <ul class="nav navbar-nav navbar-respond">
-                <li><a href="/blog">首页</a></li>
-                <li><a href="">文章分类</a></li>
-                <li><a href="/article/archive">文章归档</a></li>
+                <li><a href="{% url 'blog:index' %}">首页</a></li>
+                <li class="dropdown">
+                  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                      文章分类 <span class="caret"></span></a>
+                  <ul class="dropdown-menu">
+                    <li><a href="{% url 'blog:search_category' 'Coding征途' 1%}">Coding征途</a></li>
+                    <li><a href="{% url 'blog:search_category' '闲言碎语' 1%}">闲言碎语</a></li>
+                    <li><a href="{% url 'blog:search_category' '杂感随想' 1%}">杂感随想</a></li>
+                    <li><a href="{% url 'blog:search_category' '未来TODO' 1%}">未来TODO</a></li>
+                    <li><a href="{% url 'blog:search_category' '莫名牢骚' 1%}">莫名牢骚</a></li>
+                  </ul>
+                </li>
+                <li><a href="{% url 'blog:archive' %}">文章归档</a></li>
                 {% if user.is_authenticated %}
-                <li><a id="" href="/article/publish">写文章</a></li>
-                <li><a href="">关于</a></li>
+                <li><a id="" href="{% url 'blog:article_publish' %}">写文章</a></li>
+                <li><a href="{% url 'blog:about' %}">关于</a></li>
                 <li><a href="">友链</a></li>
-                <li><a href="">留言板</a></li>
+                <li><a href="{% url 'blog:message_board' %}">留言板</a></li>
                 {% endif %}
 
             </ul>
@@ -29,12 +39,12 @@
                 <!--</form>-->
             <!--</ul>-->
             <ul class="nav navbar-nav navbar-right">
-                <li><a href="/accounts/register">注册</a></li>
+                <li><a href="{% url 'blog:register' %}">注册</a></li>
                 {% if request.user.is_staff %}
                 <li><a href="">{{request.user.username}}</a></li>
-                <li><a href="/accounts/logout">注销</a></li>
+                <li><a href="{% url 'blog:logout' %}">注销</a></li>
                 {% else %}
-                <li><a href="/accounts/loginpage">登入</a></li>
+                <li><a href="{% url 'blog:login' %}">登入</a></li>
                 {% endif %}
             </ul>
         </div>

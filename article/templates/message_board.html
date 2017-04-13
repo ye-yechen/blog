@@ -1,0 +1,64 @@
+{% extends 'blog_base.html' %}
+{% load get_dict_item %}
+{% block title%}
+留言板 | yech.site
+{% endblock %}
+{% block content %}
+<section class="content-wrap">
+    <div class="container">
+        <div class="row">
+            <aside class="col-md-1 sidebar">
+            </aside>
+            <main class="col-md-8 main-content">
+                <article  class="post">
+                    <header class="entry-header">
+                        <h1 class="entry-title archive-title">留言板</h1>
+                    </header>
+                    <div class="entry-content">
+                        <p style="text-align: center;">因为我刚好遇见你，留下足迹才美丽</p>
+                        <p style="text-align: center;">说点什么，都是好的</p>
+                        <p style="text-align: center;">
+                            <div class="row">
+                              <div class="">
+                                <div href="#" class="thumbnail">
+                                  <img src="/static/image/chen.png" title="www.yech.site">
+                                </div>
+                              </div>
+                            </div>
+                        </p>
+                    </div>
+                </article>
+
+                <div class="post">
+                    {% for message in messages %}
+                    <div class="post-footer">
+                        <div class="comment-author">
+                            <img src="/static/image/logo.png" class="author-img">
+                            <cite class="fn url">{{message.author.username}}</cite>
+                            <time>{{message.message_time|date:'Y-m-d'}}</time>
+                        </div>
+                        <div class="comment-content">
+                            <p>{{message.content}}</p>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+
+                {% if request.user.is_authenticated %}
+                <div id="respond">
+                        <form action="{% url 'blog:message_board' %}" method="post">{% csrf_token %}
+                            <div class="form-group">
+                                 <textarea class="form-control" name="message_content" id="reply_area" rows="6" placeholder="留下足迹才美丽..."></textarea>
+                            </div>
+                            <footer class="entry-footer">
+                                <button class="btn btn-primary reply" type="submit">留言</button>
+                            </footer>
+                        </form>
+                    </div>
+                {% endif %}
+            </main>
+        </div>
+    </div>
+</section>
+
+{% endblock %}
