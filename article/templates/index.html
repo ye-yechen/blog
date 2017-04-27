@@ -64,7 +64,20 @@
                 </nav>
             </main>
             <aside class="col-md-3 sidebar">
-                <div class="widget"></div>
+                <div class="widget">
+                    <header class="entry-header">
+                        <h1 class="page-title">归档</h1>
+                    </header>
+                    <div class="">
+                        <ul>
+                            {% for date in date_list %}
+                                <li>
+                                    <b><a href="{% url 'blog:search_archive' date.year date.month 1%}">{{date.year}}年{{date.month}}月</a></b>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
                 <div class="widget">
                     <header class="entry-header">
                         <h1 class="page-title">标签云</h1>

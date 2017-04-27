@@ -10,6 +10,7 @@
         <div class="navbar-collapse collapse">
             <ul class="nav navbar-nav navbar-respond">
                 <li><a href="{% url 'blog:index' %}">首页</a></li>
+                <li><a href="{% url 'blog:zhihu_style' %}">知乎style</a></li>
                 <li class="dropdown">
                   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
                       文章分类 <span class="caret"></span></a>
@@ -23,11 +24,12 @@
                 </li>
                 <li><a href="{% url 'blog:archive' %}">文章归档</a></li>
                 {% if user.is_authenticated %}
-                <li><a id="" href="{% url 'blog:article_publish' %}">写文章</a></li>
+                <li><a href="{% url 'blog:article_publish' %}">写文章</a></li>
+                {% endif %}
                 <li><a href="{% url 'blog:about' %}">关于</a></li>
                 <li><a href="">友链</a></li>
                 <li><a href="{% url 'blog:message_board' %}">留言板</a></li>
-                {% endif %}
+
 
             </ul>
             <!--<ul class="nav navbar-nav navbar-respond">-->

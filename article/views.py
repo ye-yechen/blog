@@ -9,12 +9,14 @@ from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.views.generic.edit import FormView
 from django.contrib.auth import authenticate, login, logout
 from forms import RegisterForm
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, JsonResponse
 from django.contrib.auth.models import User
 from django.conf import settings as django_settings
 from token import token_confirm
 from collections import defaultdict, OrderedDict
 from tag_cloud import TagCloud, TagInfo
+from analyze import Analyze
+import json
 
 
 # def get_tag_article_nums():    # 查询各标签以及含此标签的文章数量
@@ -42,6 +44,17 @@ def get_tag_info():     # 封装标签信息
     return tag_info_list
 
 
+# def get_archive_info(date_list):     # 获取文章归档信息,返回dict
+#     # date_list = Article.objects.datetimes('create_time', 'month', order='DESC')
+#     article_dict = OrderedDict()
+#     for date in date_list:
+#         year = int(date.year)
+#         month = int(date.month)
+#         article_list = Article.objects.filter(create_time__year=year, create_time__month=month)
+#         article_dict[date] = article_list
+#     return article_dict
+
+
 def home(request, page=1):
     articles = Article.objects.all().order_by('-create_time')
     # 分页
@@ -57,8 +70,9 @@ def home(request, page=1):
         article.tags = article.tags.split()
 
     tag_info_list = get_tag_info()
-
-    return render(request, 'index.html', {'html_title': '首页', 'articles': articles, 'tag_info_list': tag_info_list})
+    date_list = Article.objects.datetimes('create_time', 'month', order='DESC')
+    return render(request, 'index.html', {'html_title': '首页', 'articles': articles, 'tag_info_list': tag_info_list,
+                                          'date_list': date_list})
 
 
 def publish(request):   # 发表文章
@@ -130,9 +144,11 @@ def article_detail(request, article_id):  # 全文阅读
 
     replies = models.Reply.objects.filter(article_id=article_id)  # 查找此博客的所有回复
     tag_info_list = get_tag_info()
+    date_list = Article.objects.datetimes('create_time', 'month', order='DESC')
     # for reply in replies:
     #     print reply.author.username
-    return render(request, 'article_detail.html', {'article': article, 'replies': replies, 'tag_info_list': tag_info_list})
+    return render(request, 'article_detail.html', {'article': article, 'replies': replies, 'tag_info_list': tag_info_list,
+                                                   'date_list': date_list})
 
 
 class RegisterView(FormView):
@@ -285,7 +301,9 @@ def search_category(request, category_name, page=1):    # 搜索相同分类的�
         article.tags = article.tags.split()
 
     tag_info_list = get_tag_info()
-    return render(request, 'index.html', {'html_title': category_name, 'articles': articles, 'tag_info_list': tag_info_list})
+    date_list = Article.objects.datetimes('create_time', 'month', order='DESC')
+    return render(request, 'index.html', {'html_title': category_name, 'articles': articles, 'tag_info_list': tag_info_list,
+                                          'date_list': date_list})
 
 
 def search_tag(request, tag_name, page=1):  # 搜索相同标签的文章并分页显示
@@ -303,7 +321,9 @@ def search_tag(request, tag_name, page=1):  # 搜索相同标签的文章并分�
         article.tags = article.tags.split()
 
     tag_info_list = get_tag_info()
-    return render(request, 'index.html', {'html_title': tag_name, 'articles': articles, 'tag_info_list': tag_info_list})
+    date_list = Article.objects.datetimes('create_time', 'month', order='DESC')
+    return render(request, 'index.html', {'html_title': tag_name, 'articles': articles, 'tag_info_list': tag_info_list,
+                                          'date_list': date_list})
 
 
 def about(request):     # 关于页面
@@ -322,3 +342,65 @@ def message_board(request):     # 留言页面
     return render(request, 'message_board.html', {'messages': messages})
 
 
+def zhihu_style(request):   # 知乎数据分析页面
+    return render(request, 'zhihu.html')
+
+
+def get_user_num(request):  # 统计总人数
+    analyze = Analyze()
+    result = analyze.get_user_num()
+    return JsonResponse(result)
+
+
+def get_sex(request):   # 知乎用户性别分析
+    analyze = Analyze()
+    result = analyze.get_sex()
+    return JsonResponse(result)
+
+
+def get_school_count(request):  # 用户学校分析
+    analyze = Analyze()
+    result = analyze.get_school_count()
+    return JsonResponse(result)
+
+
+def get_business_count(request):    # 行业统计
+    analyze = Analyze()
+    result = analyze.get_business_count()
+    return JsonResponse(result)
+
+
+def get_location_count(request):    # 地域统计
+    analyze = Analyze()
+    result = analyze.get_location_count()
+    return JsonResponse(result)
+
+
+def get_company_count(request):  # 公司统计
+    analyze = Analyze()
+    result = analyze.get_company_count()
+    return JsonResponse(result)
+
+
+def get_voteup_count(request):   # 赞同数统计
+    analyze = Analyze()
+    result = analyze.get_voteup_count()
+    return JsonResponse(result)
+
+
+def get_follower_count(request):    # 粉丝数统计
+    analyze = Analyze()
+    result = analyze.get_follower_count()
+    return JsonResponse(result)
+
+
+def get_answer_count(request):  # 回答问题数
+    analyze = Analyze()
+    result = analyze.get_answer_count()
+    return JsonResponse(result)
+
+
+def get_name_count(request):    # 统计中英文昵称
+    analyze = Analyze()
+    result = analyze.get_name_count()
+    return JsonResponse(result)
