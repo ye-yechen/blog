@@ -1,6 +1,8 @@
 from django.conf.urls import url
 import views
 from views import RegisterView
+from django.conf.urls.static import static
+from django.conf import settings
 urlpatterns = [
     url(r'^blog/$', views.home, name='index'),
     url(r'^blog/(?P<page>\d+)$', views.home, name='blog_index'),
@@ -18,6 +20,8 @@ urlpatterns = [
     url(r'^article/category/(?P<category_name>.+)/(?P<page>\d+)$', views.search_category, name='search_category'),
     url(r'^article/tag/(?P<tag_name>.+)/(?P<page>\d+)$', views.search_tag, name='search_tag'),
     url(r'^blog/about', views.about, name='about'),
+    url(r'^blog/photos', views.photo_wall, name='photo_wall'),
+    url(r'^blog/upload', views.upload_img, name='upload_img'),
     url(r'^blog/message', views.message_board, name='message_board'),
     url(r'^blog/show$', views.zhihu_style, name='zhihu_style'),
     url(r'^blog/usernum$', views.get_user_num, name='get_user_num'),
@@ -30,4 +34,5 @@ urlpatterns = [
     url(r'^blog/follower$', views.get_follower_count, name='get_follower_count'),
     url(r'^blog/answer$', views.get_answer_count, name='get_answer_count'),
     url(r'^blog/name$', views.get_name_count, name='get_name_count'),
-]
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+

@@ -78,3 +78,14 @@ class Message(models.Model):    # 留言
 
     def __unicode__(self):
         return self.content
+
+
+class Photo(models.Model):  # 照片
+    author = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
+    image = models.ImageField(upload_to='upload/', blank=True, null=True)
+    photo_name = models.CharField(max_length=50)
+    photo_path = models.CharField(max_length=50)
+    upload_time = models.DateTimeField()
+
+    def __unicode__(self):
+        return self.photo_name

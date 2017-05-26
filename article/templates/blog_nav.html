@@ -10,7 +10,7 @@
         <div class="navbar-collapse collapse">
             <ul class="nav navbar-nav navbar-respond">
                 <li><a href="{% url 'blog:index' %}">首页</a></li>
-                <li><a href="{% url 'blog:zhihu_style' %}">知乎style</a></li>
+                <li><a href="{% url 'blog:zhihu_style' %}">数据看知乎</a></li>
                 <li class="dropdown">
                   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
                       文章分类 <span class="caret"></span></a>
@@ -27,7 +27,7 @@
                 <li><a href="{% url 'blog:article_publish' %}">写文章</a></li>
                 {% endif %}
                 <li><a href="{% url 'blog:about' %}">关于</a></li>
-                <li><a href="">友链</a></li>
+                <li><a href="{% url 'blog:photo_wall' %}">照片墙</a></li>
                 <li><a href="{% url 'blog:message_board' %}">留言板</a></li>
 
 
@@ -42,12 +42,14 @@
             <!--</ul>-->
             <ul class="nav navbar-nav navbar-right">
                 <li><a href="{% url 'blog:register' %}">注册</a></li>
-                {% if request.user.is_staff %}
+                {% if not request.user.username %}
+                <li><a href="{% url 'blog:login' %}">登入</a></li>
+                {% else %}
                 <li><a href="">{{request.user.username}}</a></li>
                 <li><a href="{% url 'blog:logout' %}">注销</a></li>
-                {% else %}
-                <li><a href="{% url 'blog:login' %}">登入</a></li>
+                <!--<li><a href="{% url 'blog:login' %}">登入</a></li>-->
                 {% endif %}
+
             </ul>
         </div>
     </div>

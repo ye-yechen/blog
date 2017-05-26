@@ -1,22 +1,23 @@
 # -*- coding:utf-8 -*-
-from django.db.models import Count
-from django.shortcuts import render
-import models
-from models import Article, Reply, Tag, Category, Message
-import markdown
 import datetime
-from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
-from django.views.generic.edit import FormView
+from collections import OrderedDict
+
+import markdown
+from django.conf import settings
 from django.contrib.auth import authenticate, login, logout
-from forms import RegisterForm
-from django.http import HttpResponseRedirect, JsonResponse
 from django.contrib.auth.models import User
-from django.conf import settings as django_settings
-from token import token_confirm
-from collections import defaultdict, OrderedDict
-from tag_cloud import TagCloud, TagInfo
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
+from django.db.models import Count
+from django.http import HttpResponseRedirect, JsonResponse
+from django.shortcuts import render
+from django.views.generic.edit import FormView
+
+import models
 from analyze import Analyze
-import json
+from forms import RegisterForm
+from models import Article, Reply, Tag, Category, Message, Photo
+from tag_cloud import TagCloud, TagInfo
+from token import token_confirm
 
 
 # def get_tag_article_nums():    # 查询各标签以及含此标签的文章数量
@@ -170,14 +171,14 @@ def active_user(request, token):    # 认证激活函数
         for user in users:
             user.delete()
             return render(request, 'message.html',
-                          {'message': u'对不起，验证链接已经过期，请重新<a href=\"' + unicode(django_settings.DOMAIN) + u'/signup\">注册</a>'})
+                          {'message': u'对不起，验证链接已经过期，请重新<a href=\"' + unicode(settings.DOMAIN) + u'/signup\">注册</a>'})
     try:
         user = User.objects.get(username=username)
     except User.DoesNotExist:
         return render(request, 'message.html', {'message': u"对不起，您所验证的用户不存在，请重新注册"})
     user.is_active = True
     user.save()
-    message = u'验证成功，请进行<a href=\"' + unicode(django_settings.ROOT_URLCONF) + u'/login\">登录</a>操作'
+    message = u'验证成功，请进行<a href=\"' + unicode(settings.ROOT_URLCONF) + u'/login\">登录</a>操作'
     return render(request, 'message.html', {'message':message})
 
 
@@ -192,7 +193,8 @@ def login_site(request):    # 登入
         redirect_to = request.POST.get('next')  # 获取隐藏域的值，进行页面跳转
         username = request.POST.get('username')
         password = request.POST.get('password')
-        user = authenticate(username=username, password=password)  # 使用 Django 的 authenticate 方法来验证
+        # 使用 Django 的 authenticate 方法来验证
+        user = authenticate(username=username, password=password)
         if user:
             login(request, user)
             return HttpResponseRedirect(redirect_to)
@@ -328,6 +330,29 @@ def search_tag(request, tag_name, page=1):  # 搜索相同标签的文章并分�
 
 def about(request):     # 关于页面
     return render(request, 'about.html')
+
+
+def photo_wall(request):
+    photos = Photo.objects.all().order_by('-upload_time')
+    return render(request, 'photo_wall.html', {'photos': photos})
+
+
+def upload_img(request):
+    if request.method == "POST":
+        image = request.FILES.get('image')
+        if image:
+            upload_time = datetime.datetime.now()
+            photo_name = image.name
+            photo_path = '/upload/'+image.name
+            author = request.user
+            photo = Photo(author=author, image=image, photo_name=photo_name,
+                          photo_path=photo_path, upload_time=upload_time)
+            photo.save()
+            photos = Photo.objects.all().order_by('-upload_time')
+            return render(request, 'photo_wall.html', {'photos': photos})
+    else:
+        photos = Photo.objects.all().order_by('-upload_time')
+        return render(request, 'photo_wall.html', {'photos': photos})
 
 
 def message_board(request):     # 留言页面

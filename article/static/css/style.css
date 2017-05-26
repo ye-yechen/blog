@@ -168,3 +168,66 @@ i {
     margin-left:30px;
     margin-right:30px;
 }
+
+.input-file{
+    display: inline-block;
+    position: relative;
+    overflow: hidden;
+    text-align: center;
+    width: auto;
+    background-color: #2c7;
+    border: solid 1px #ddd;
+    border-radius: 4px;
+    padding: 5px 10px;
+    font-size: 12px;
+    font-weight: normal;
+    line-height: 18px;
+    color:#fff;
+    text-decoration: none;
+}
+
+.input-file input {
+    position: absolute;
+    top: 0;
+    right: 0;
+    font-size: 14px;
+    background-color: #fff;
+    transform: translate(-300px, 0px) scale(4);
+    height: 40px;
+    opacity: 0;
+    filter: alpha(opacity=0);
+ }
+
+ .input-file:hover {
+    color: #444;
+    background:#fff2df;
+    border-color: #ccc;
+    text-decoration: none
+ }
+ .box {
+    background: #ffffff;
+    height: 150px;
+    margin: 10px;
+    line-height: 150px;
+    text-align: center;
+    color: #fff;
+    font-size: 3em;
+ }
+ .box-end {
+    background: #e9e7ef;
+    height: 150px;
+    margin: 10px;
+    line-height: 150px;
+    text-align: center;
+    color: #fff;
+    font-size: 3em;
+ }
+.wrapper {
+    width: auto;
+    padding: 15px auto;
+    margin: 20px auto;
+    display: grid;
+    grid-template-columns: repeat(4, 165px);
+    grid-template-rows: 165px 165px 165px;
+    grid-auto-flow: rows;
+ }
