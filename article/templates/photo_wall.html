@@ -10,6 +10,9 @@
             </aside>
             <main class="col-md-8 main-content">
                 <article  class="post">
+                    <header class="entry-header">
+                        <h1 class="entry-title archive-title">^_^照片墙^_^</h1>
+                    </header>
                     <div class="wrapper">
                         {% for photo in photos %}
                         <div class="box">
@@ -18,16 +21,18 @@
                         {% endfor %}
                         <div class="box-end" id="photo-end">+</div>
                     </div>
+                    {% if request.user.is_staff %}
                     <form enctype="multipart/form-data" method="post" action="{% url 'blog:upload_img' %}" id="upload_form">
                         {% csrf_token %}
                         <a class="input-file" href="javascript:;">
                             <input type="file" name="image">
                             <span class="glyphicon glyphicon-picture"></span>
-                            图片
+                            上传
                         </a>
                         <div class="showFile"></div>
                         <div class="showError"></div>
                     </form>
+                    {% endif %}
                 </article>
             </main>
         </div>
