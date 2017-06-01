@@ -12,6 +12,10 @@
 
 - **部署**：部署环境为：ubuntu 16.04，apache
 
+- **网站截图**：
+![c1](https://github.com/creatorYC/blog/blob/master/image/c25.PNG)
+![c2](https://github.com/creatorYC/blog/blob/master/image/c26.PNG)
+![c3](https://github.com/creatorYC/blog/blob/master/image/c27.PNG)
 ---
 
 ### contact me:
